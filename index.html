@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N9M - NightMare Clan</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(to right, #000000, #1a001a);
+      color: #f5f5f5;
+    }
+
+    header {
+      background: #5e00a3;
+      padding: 25px;
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+    }
+
+    .welcome {
+      text-align: center;
+      margin: 30px auto;
+      font-size: 1.4rem;
+      max-width: 900px;
+      background: rgba(94,0,163,0.2);
+      padding: 20px;
+      border: 2px solid #7a00d4;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(122,0,212,0.4);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: #110011;
+      border: 2px solid #7a00d4;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(122,0,212,0.4);
+      transition: 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 35px rgba(170,0,255,0.8);
+    }
+
+    h2 {
+      color: #bb44ff;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    ul {
+      padding-left: 18px;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    a {
+      color: #d27aff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 18px;
+      background: #0a0010;
+      color: #777;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <!-- Inline SVG logo — no external image needed (works even if upload failed) -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-direction:column">
+      <svg width="160" height="160" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#7a00d4" />
+            <stop offset="100%" stop-color="#ff44ff" />
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <rect width="200" height="200" rx="20" ry="20" fill="#0b0010" />
+        <g filter="url(#glow)">
+          <path d="M40 150 L60 60 L100 40 L140 60 L160 150 Z" fill="url(#g1)" opacity="0.95" />
+          <text x="100" y="120" font-family="Segoe UI, Tahoma, sans-serif" font-size="48" text-anchor="middle" fill="#0b0010" font-weight="700">N9M</text>
+        </g>
+      </svg>
+      <div style="text-align:center;">
+        <div style="font-size:1.1rem;font-weight:800;letter-spacing:2px;color:#eac0ff">N9M - NIGHTMARE CLAN</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="welcome">
+    <strong>Welcome to kawasan keluarga mafia kegelapan</strong><br>
+    Tempat berkumpulnya keluarga NightMare (N9M)
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>List Keluarga</h2>
+      <ul>
+        <li><strong>Mafia:</strong> Ucup 19 (ARE01)</li>
+        <li><strong>Ketua:</strong> Fahri 16 (Pahwiw)</li>
+        <li><strong>Wakil Ketua:</strong> Yanz 15 (yanzzy)</li>
+        <li><strong>Wakil Ketua 2:</strong> Evan 14 (Rizz969)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Anak-anak</h2>
+      <ul>
+        <li>1. Ucup 19 (UbiGoreng)</li>
+        <li>2. Julius 16 (Julius)</li>
+        <li>3. Axovels 15 (Vairaza)</li>
+        <li>4. acap 13 (divinx1)</li>
+        <li>5. -</li>
+        <li>6. -</li>
+        <li>7. -</li>
+        <li>8. -</li>
+        <li>9. -</li>
+        <li>10. -</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Daftar Masuk Clan</h2>
+      <p>Jika ingin masuk Clan N9M (NightMare), wajib izin terlebih dahulu.</p>
+      <p>Klik link WhatsApp di bawah ini untuk mengirim pesan otomatis:</p>
+      <p>
+        <a href="https://wa.me/6283164410185?text=BANG%20SAYA%20MAU%20MASUK%20CLAN" target="_blank">
+          Hubungi Admin Clan
+        </a>
+      </p>
+    </div>
+
+  </div>
+
+  <footer>
+    © 2025 N9M — NightMare Clan. All Rights Reserved.
+  </footer>
+
+</body>
+</html>
