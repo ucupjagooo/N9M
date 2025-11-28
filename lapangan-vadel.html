@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padel Court Arena - Rebelze City</title>
+    <!-- Memuat Tailwind CSS dari CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Mengatur font Inter dan tema gelap-ungu */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e; /* Hitam keunguan tua */
+            color: #ffffff; /* Teks putih */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container-card {
+            background-color: #2a094e; /* Ungu gelap untuk card */
+            border: 2px solid #6c47ff; /* Border ungu terang */
+        }
+        .text-purple-highlight {
+            color: #bd93f9; /* Ungu lavender untuk highlight */
+        }
+        /* Style untuk efek visual pada card */
+        .shadow-purple-heavy {
+            box-shadow: 0 20px 25px -5px rgba(108, 71, 255, 0.4), 0 10px 10px -5px rgba(108, 71, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="w-full max-w-5xl container-card rounded-xl p-6 sm:p-10 shadow-purple-heavy">
+
+        <!-- Header Arena -->
+        <header class="text-center mb-10">
+            <p class="text-2xl font-light text-gray-300">Pusat Olahraga Elit Rebelze City</p>
+            <h1 class="text-5xl sm:text-6xl font-extrabold text-purple-highlight tracking-wider uppercase mt-2">
+                REBELZE PADEL ARENA
+            </h1>
+            <p class="text-xl sm:text-2xl font-semibold text-white mt-4">
+                "Kesehatan dan Jaringan, Semua Dimulai di Lapangan"
+            </p>
+        </header>
+
+        <!-- Bagian Foto dan Detail Padel -->
+        <main class="space-y-10">
+
+            <!-- Blok Gambar Lapangan Padel (Placeholder) -->
+            <div class="relative rounded-lg overflow-hidden shadow-purple-heavy h-64 md:h-80 flex items-center justify-center bg-[#1e073a]">
+                <!-- Placeholder untuk Gambar Lapangan Padel -->
+                <img 
+                    src=lapvadel.png
+                    alt="Lapel Padel yang mewah" 
+                    class="w-full h-full object-cover opacity-70"
+                >
+                <div class="absolute text-3xl font-bold text-white tracking-widest pointer-events-none">
+                     
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Kolom 1: Tarif dan Penyewaan -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-white border-b-2 border-purple-highlight pb-2">
+                        Reservasi & Tarif Sewa
+                    </h2>
+                    <p class="text-gray-200 leading-relaxed">
+                        Nikmati fasilitas Padel terbaik di kota. Lapangan kami menggunakan rumput sintetis premium dan pencahayaan kelas turnamen, terbuka untuk reservasi tim.
+                    </p>
+
+                    <!-- Detail Harga -->
+                    <div class="bg-[#3e1f76] p-4 rounded-lg border border-[#6c47ff]">
+                        <p class="text-xl font-semibold text-purple-highlight mb-2">Tarif Per Jam (Penyewaan Lapangan)</p>
+                        <ul class="space-y-3">
+                            <!-- Siang Hari -->
+                            <li class="flex justify-between items-center">
+                                <span class="text-gray-100 font-medium">Senin - Jumat (Siang, 08:00 - 17:00)</span>
+                                <span class="text-white font-bold text-lg">$25 / Jam</span>
+                            </li>
+                            <!-- Malam Hari -->
+                            <li class="flex justify-between items-center">
+                                <span class="text-gray-100 font-medium">Senin - Jumat (Malam, 17:00 - Selesai)</span>
+                                <span class="text-white font-bold text-lg text-yellow-300">$40 / Jam</span>
+                            </li>
+                            <!-- Akhir Pekan -->
+                            <li class="flex justify-between items-center border-t border-gray-600 pt-3">
+                                <span class="text-purple-highlight font-semibold">Akhir Pekan & Hari Libur</span>
+                                <span class="text-purple-highlight font-bold text-lg">$50 / Jam</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Kolom 2: Fasilitas dan Tujuan -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-white border-b-2 border-purple-highlight pb-2">
+                        Fasilitas & Keuntungan
+                    </h2>
+                    
+                    <!-- Fasilitas -->
+                    <div class="bg-[#3e1f76] p-4 rounded-lg border border-[#6c47ff]">
+                        <p class="text-xl font-semibold text-purple-highlight mb-2">Fasilitas yang Disediakan</p>
+                        <ul class="list-disc list-inside space-y-1 ml-4 text-gray-100">
+                            <li>Penyewaan Raket dan Bola Padel Premium.</li>
+                            <li>Area Duduk VIP untuk pengamat.</li>
+                            <li>Ruang Ganti dan Shower Pribadi yang Bersih.</li>
+                            <li>Kafe/Lounge Eksklusif (Khusus Anggota).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tujuan RP -->
+                    <div>
+                        <p class="text-lg font-semibold text-purple-highlight mb-2">Tujuan Roleplay (RP):</p>
+                        <p class="text-gray-100 leading-relaxed">
+                            Arena ini adalah titik temu yang netral bagi para petinggi kota. Selain olahraga, tempat ini sering digunakan untuk *meeting* rahasia, membangun aliansi bisnis (legal atau ilegal), dan sebagai tempat *showcase* kekuatan finansial. Tempat yang sempurna untuk bersantai sambil mengamankan kesepakatan besar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ajakan Reservasi -->
+            <div class="mt-10 p-5 bg-green-800 bg-opacity-50 rounded-lg text-center border border-green-500">
+                <p class="text-lg font-bold text-green-300">BOOKING SEKARANG!</p>
+                <p class="text-sm text-gray-300 mt-1">Hubungi manajemen arena untuk reservasi lapangan Anda. Dapatkan diskon 10% untuk pemesanan mingguan!</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-10 pt-6 border-t border-gray-700 text-center text-gray-400 text-sm">
+            <p>Rebelze Padel Arena | Dikelola oleh Divisi Rekreasi Rebelze City.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
