@@ -1,216 +1,458 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>N9M - NightMare Clan</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(to right, #000000, #1a001a);
-      color: #f5f5f5;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>N9M — NightMare Clan (Full Animated Single HTML)</title>
+<style>
+  /* ===== Base ===== */
+  :root{
+    --accent1: #7a00d4;
+    --accent2: #ff44ff;
+    --bg-dark: #060006;
+    --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg-dark);color:#eee;font-family:"Segoe UI",Tahoma,Arial;}
 
-    header {
-      background: #5e00a3;
-      padding: 25px;
-      text-align: center;
-      font-size: 2.2rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.6);
-    }
+  /* ===== Neon page border (animated glow) ===== */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:9999;
+    border-radius:4px;
+    box-shadow:
+      0 0 30px rgba(122,0,212,0.12),
+      inset 0 0 120px rgba(122,0,212,0.03);
+    animation: neonPulse 4s linear infinite;
+  }
+  @keyframes neonPulse {
+    0% { box-shadow: 0 0 20px rgba(122,0,212,0.05), inset 0 0 40px rgba(255,68,255,0.02); }
+    50%{ box-shadow: 0 0 55px rgba(122,0,212,0.18), inset 0 0 120px rgba(255,68,255,0.04); }
+    100%{ box-shadow: 0 0 20px rgba(122,0,212,0.05), inset 0 0 40px rgba(255,68,255,0.02); }
+  }
 
-    .welcome {
-      text-align: center;
-      margin: 30px auto;
-      font-size: 1.4rem;
-      max-width: 900px;
-      background: rgba(94,0,163,0.2);
-      padding: 20px;
-      border: 2px solid #7a00d4;
-      border-radius: 15px;
-      box-shadow: 0 0 25px rgba(122,0,212,0.4);
-    }
+  /* ===== Moving smoke / nebula background (pure CSS) ===== */
+  .bg-smoke {
+    position:fixed; inset:-10% -10% -10% -10%; z-index:-3; pointer-events:none;
+    background:
+      radial-gradient(30% 40% at 10% 20%, rgba(122,0,212,0.16), transparent 12%),
+      radial-gradient(40% 60% at 80% 80%, rgba(255,68,255,0.10), transparent 14%),
+      radial-gradient(50% 70% at 50% 50%, rgba(20,0,30,0.55), rgba(0,0,0,0.95));
+    filter: blur(20px) saturate(120%);
+    transform-origin:center;
+    animation: smokeMove 28s linear infinite;
+  }
+  .bg-smoke::after{
+    /* subtle moving layer */
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(35% 30% at 30% 60%, rgba(255,10,120,0.04), transparent 10%),
+      radial-gradient(20% 25% at 70% 30%, rgba(10,200,255,0.03), transparent 10%);
+    mix-blend-mode: screen;
+    animation: smokeFlow 40s linear infinite;
+    opacity:0.9;
+  }
+  @keyframes smokeMove {
+    0% { transform: translate(-4%, -2%) scale(1); }
+    50%{ transform: translate(4%, 2%) scale(1.06); }
+    100%{ transform: translate(-4%, -2%) scale(1); }
+  }
+  @keyframes smokeFlow {
+    0% { transform: translate(0,0) scale(1); opacity:0.9; }
+    50%{ transform: translate(-8%,6%) scale(1.05); opacity:1; }
+    100%{ transform: translate(0,0) scale(1); opacity:0.9; }
+  }
 
-    .container {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-    }
+  /* ===== Layout & header ===== */
+  header{
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    padding:28px 18px; text-align:center; position:relative; z-index:3;
+    backdrop-filter: blur(4px);
+  }
+  .logo-wrap{
+    display:flex;align-items:center;gap:14px;flex-direction:column;
+    background: linear-gradient(180deg, rgba(122,0,212,0.06), rgba(0,0,0,0.05));
+    padding:14px;border-radius:16px;border:1px solid rgba(122,0,212,0.12);
+    box-shadow: 0 10px 30px rgba(122,0,212,0.12);
+    transition: transform .35s cubic-bezier(.2,.9,.3,1);
+  }
+  .logo-wrap:hover{ transform: translateY(-6px); }
 
-    .card {
-      background: #110011;
-      border: 2px solid #7a00d4;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(122,0,212,0.4);
-      transition: 0.25s;
-    }
+  /* inline svg sized */
+  svg.logo{
+    width:160px;height:160px; display:block;
+    filter: drop-shadow(0 12px 20px rgba(120,0,200,0.22));
+  }
+  .clan-title{ font-weight:900; letter-spacing:2px; color:#f0d0ff; font-size:1.1rem; }
 
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 0 35px rgba(170,0,255,0.8);
-    }
+  /* ===== Glitch effect for the title label ===== */
+  .glitch-title{
+    font-size:36px; font-weight:900; margin:6px 0;
+    position:relative; color:#e6b9ff;
+    display:inline-block;
+    text-transform:uppercase;
+  }
+  .glitch-title::before,
+  .glitch-title::after{
+    content: attr(data-text);
+    position:absolute; left:0; top:0; width:100%;
+    clip-path: inset(0 0 0 0);
+    opacity:0.9;
+  }
+  .glitch-title::before{ transform:translate(3px,-3px); color:#ff3fb7; mix-blend-mode:screen; animation: g1 2s infinite linear; }
+  .glitch-title::after { transform:translate(-3px,3px); color:#3ff7ff; mix-blend-mode:screen; animation: g2 2.2s infinite linear; }
+  @keyframes g1{
+    0%{ clip-path: inset(0 0 100% 0); transform:translate(3px,-3px); opacity:0.6 }
+    10%{ clip-path: inset(10% 0 65% 0); transform:translate(6px,-6px); opacity:1 }
+    25%{ clip-path: inset(0 0 40% 0); transform:translate(2px,-2px); opacity:0.8 }
+    60%{ clip-path: inset(40% 0 0 0); transform:translate(8px,-2px); opacity:0.5 }
+    100%{ clip-path: inset(0 0 100% 0); transform:translate(3px,-3px); opacity:0.6 }
+  }
+  @keyframes g2{
+    0%{ clip-path: inset(100% 0 0 0); transform:translate(-3px,3px); opacity:0.6}
+    15%{ clip-path: inset(30% 0 40% 0); transform:translate(-6px,6px); opacity:1 }
+    45%{ clip-path: inset(0 0 30% 0); transform:translate(-2px,2px); opacity:0.8 }
+    85%{ clip-path: inset(60% 0 0 0); transform:translate(-10px,4px); opacity:0.4 }
+    100%{ clip-path: inset(100% 0 0 0); transform:translate(-3px,3px); opacity:0.6}
+  }
 
-    h2 {
-      color: #bb44ff;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-    }
+  /* ===== Main content grid ===== */
+  .welcome {
+    margin:18px auto; padding:18px; max-width:920px; text-align:center;
+    background: linear-gradient(180deg, rgba(122,0,212,0.06), rgba(0,0,0,0.06));
+    border-radius:12px; border:1px solid rgba(122,0,212,0.12);
+    box-shadow: 0 10px 30px rgba(122,0,212,0.06);
+  }
 
-    ul {
-      padding-left: 18px;
-      line-height: 1.6;
-      font-size: 1rem;
-    }
+  .container{
+    max-width:1200px; margin:28px auto; padding:18px; display:grid; gap:20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    z-index:2; position:relative;
+  }
+  .card{
+    background: linear-gradient(180deg, rgba(10,0,16,0.6), rgba(5,0,8,0.6));
+    border:1px solid rgba(122,0,212,0.08);
+    padding:18px; border-radius:12px; box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+    transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s;
+  }
+  .card:hover{ transform: translateY(-8px); box-shadow: 0 18px 48px rgba(122,0,212,0.18); }
 
-    a {
-      color: #d27aff;
-      font-weight: bold;
-      text-decoration: none;
-    }
+  h2 { color:var(--accent2); margin:0 0 10px; font-size:18px; text-transform:uppercase; }
 
-    a:hover {
-      color: white;
-      text-decoration: underline;
-    }
+  a.link-btn{
+    display:inline-block; margin-top:8px; padding:10px 14px; border-radius:8px;
+    background: linear-gradient(90deg,var(--accent1),var(--accent2));
+    color:#070007; font-weight:800; text-decoration:none;
+    box-shadow: 0 8px 30px rgba(122,0,212,0.12);
+  }
 
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      padding: 18px;
-      background: #0a0010;
-      color: #777;
-      font-size: 0.9rem;
-    }
-  </style>
+  footer{ text-align:center; padding:22px 12px; color:#bfb7c9; opacity:0.9; margin-top:28px; }
+
+  /* ===== Loading overlay ===== */
+  .loading-overlay{
+    position:fixed; inset:0; z-index:9998; display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(8,0,16,0.75));
+    color:#ffd9ff; flex-direction:column; gap:14px;
+  }
+  .spinner{
+    width:72px;height:72px;border-radius:50%;position:relative;
+    box-shadow: inset 0 0 14px rgba(255,80,200,0.12);
+  }
+  .spinner::before{
+    content:""; position:absolute; inset:4px; border-radius:50%;
+    border:5px solid rgba(255,255,255,0.06);
+    border-top-color: #ff66d9; transform: rotate(0deg); animation: spin 1.1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text{ font-weight:800; letter-spacing:1px; }
+
+  /* ===== Small responsive tweaks ===== */
+  @media(max-width:600px){
+    .glitch-title{ font-size:22px; }
+    svg.logo{ width:120px; height:120px; }
+    header{ padding:18px; }
+  }
+</style>
 </head>
 <body>
 
+  <!-- Loading -->
+  <div id="loading" class="loading-overlay" aria-hidden="false">
+    <div class="spinner" aria-hidden="true"></div>
+    <div class="loading-text">LOADING — NIGHTMARE</div>
+    <div style="opacity:0.9; font-size:13px;">Memuat aset & atmosfer...</div>
+  </div>
+
+  <!-- Background smoke/nebula -->
+  <div class="bg-smoke" aria-hidden="true"></div>
+
+  <!-- Header -->
   <header>
-    <!-- Inline SVG logo — no external image needed (works even if upload failed) -->
-    <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-direction:column">
-      <svg width="160" height="160" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <div class="logo-wrap" role="img" aria-label="N9M Logo">
+      <!-- Inline SVG Logo (glow & fits theme) -->
+      <svg class="logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
-          <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stop-color="#7a00d4" />
-            <stop offset="100%" stop-color="#ff44ff" />
-          </linearGradient>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
+          <linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#7a00d4"/><stop offset="1" stop-color="#ff44ff"/></linearGradient>
+          <filter id="g"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
-        <rect width="200" height="200" rx="20" ry="20" fill="#0b0010" />
-        <g filter="url(#glow)">
-          <path d="M40 150 L60 60 L100 40 L140 60 L160 150 Z" fill="url(#g1)" opacity="0.95" />
-          <text x="100" y="120" font-family="Segoe UI, Tahoma, sans-serif" font-size="48" text-anchor="middle" fill="#0b0010" font-weight="700">N9M</text>
+        <rect width="200" height="200" rx="20" fill="#0b0010"/>
+        <g filter="url(#g)">
+          <path d="M40 150 L60 60 L100 40 L140 60 L160 150 Z" fill="url(#lg)" opacity="0.96"/>
+          <text x="100" y="122" text-anchor="middle" font-size="46" font-weight="700" fill="#0b0010" font-family="Segoe UI, Tahoma">N9M</text>
         </g>
       </svg>
-      <div style="text-align:center;">
-        <div style="font-size:1.1rem;font-weight:800;letter-spacing:2px;color:#eac0ff">N9M - NIGHTMARE CLAN</div>
-      </div>
+
+      <div class="clan-title">N9M — NIGHTMARE CLAN</div>
+    </div>
+
+    <div class="glitch-title" data-text="N9M NIGHTMARE">N9M NIGHTMARE</div>
+
+    <!-- Audio controls (play/pause) -->
+    <div style="margin-top:10px; display:flex;gap:10px; justify-content:center; align-items:center;">
+      <button id="playBtn" style="padding:8px 12px;border-radius:8px;border:0;background:linear-gradient(90deg,#7a00d4,#ff44ff);color:#070007;font-weight:800;cursor:pointer;">
+        ▶ Play Ambience
+      </button>
+      <button id="stopBtn" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#e9d4ff;cursor:pointer;">
+        ■ Stop
+      </button>
     </div>
   </header>
 
-  <div class="welcome">
-    <strong>Welcome to kawasan keluarga mafia kegelapan</strong><br>
-    Tempat berkumpulnya keluarga NightMare (N9M)
-  </div>
-
-  <div class="container">
-
-    <div class="card">
-      <h2>List Keluarga</h2>
-      <ul>
-        <li><strong>Mafia:</strong> Ucup 19 (ARE01)</li>
-        <li><strong>Ketua:</strong> Fahri 16 (Pahwiw)</li>
-        <li><strong>Wakil Ketua:</strong> Yanz 15 (yanzzy)</li>
-        <li><strong>Wakil Ketua 2:</strong> Evan 14 (Rizz969)</li>
-      </ul>
+  <main>
+    <div class="welcome" role="note">
+      <strong>Welcome to kawasan keluarga mafia kegelapan</strong>
+      <div>Tempat berkumpulnya keluarga NightMare (N9M)</div>
     </div>
 
-    <div class="card">
-      <h2>Anak-anak</h2>
-      <ul>
-        <li>1. Ucup 19 (UbiGoreng)</li>
-        <li>2. Julius 16 (Julius)</li>
-        <li>3. Axovels 15 (Vairaza)</li>
-        <li>4. acap 13 (divinx1)</li>
-        <li>5. -</li>
-        <li>6. -</li>
-        <li>7. -</li>
-        <li>8. -</li>
-        <li>9. -</li>
-        <li>10. -</li>
-      </ul>
+    <div class="container" id="grid">
+      <section class="card">
+        <h2>List Keluarga</h2>
+        <ul>
+          <li><strong>Mafia:</strong> Ucup 19 (ARE01)</li>
+          <li><strong>Ketua:</strong> Fahri 16 (Pahwiw)</li>
+          <li><strong>Wakil Ketua:</strong> Yanz 15 (yanzzy)</li>
+          <li><strong>Wakil Ketua 2:</strong> Evan 14 (Rizz969)</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Anak-anak</h2>
+        <ul>
+          <li>1. Ucup 19 (UbiGoreng)</li>
+          <li>2. Julius 16 (Julius)</li>
+          <li>3. Axovels 15 (Vairaza)</li>
+          <li>4. acap 13 (divinx1)</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Daftar Masuk Clan</h2>
+        <p>Jika ingin masuk Clan N9M (NightMare), wajib izin terlebih dahulu.</p>
+        <p><a class="link-btn" href="https://wa.me/6283164410185?text=BANG%20SAYA%20MAU%20MASUK%20CLAN" target="_blank">Hubungi Admin Clan</a></p>
+      </section>
+
+      <section class="card">
+        <h2>Bisnis NightMare</h2>
+        <ul>
+          <li>Casino</li>
+          <li>Tobacco</li>
+          <li>Obat-Obatan</li>
+          <li>Jual Beli Senjata</li>
+          <li>Latihan Menembak</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Koordinate Hood</h2>
+        <ul><li>Coming Soon</li></ul>
+      </section>
+
+      <section class="card">
+        <h2>Info Tugas</h2>
+        <ul>
+          <li>Menjaga Mr4</li>
+          <li>Menjalankan Bisnis antar Geng</li>
+        </ul>
+      </section>
     </div>
+  </main>
 
-    <div class="card">
-      <h2>Daftar Masuk Clan</h2>
-      <p>Jika ingin masuk Clan N9M (NightMare), wajib izin terlebih dahulu.</p>
-      <p>Klik link WhatsApp di bawah ini untuk mengirim pesan otomatis:</p>
-      <p>
-        <a href="https://wa.me/6283164410185?text=BANG%20SAYA%20MAU%20MASUK%20CLAN" target="_blank">
-          Hubungi Admin Clan
-        </a>
-      </p>
-    </div>
+  <footer>“Nightmare isn’t a clan — it’s a warning.
+Once we appear, your fate is already written.”</footer>
+<footer>Didikung Oleh Mr 04 (ARE01) </footer>
 
-    <div class="card">
-      <h2>Bisnis NightMare</h2>
-      <ul>
-        <li>1. Casino</li>
-        <li>2. Tobaco</li>
-        <li>3. Obat-Obatan</li>
-        <li>4. Jual Beli Senjata</li>
-        <li>5. Vest 1 dan 2</li>
-        <li>6. Latihan Menembak</li>
-        <li>7. -</li>
-        <li>8. -</li>
-        <li>9. -</li>
-        <li>10. -</li>
-      </ul>
-    </div>
+<!-- ===== Scripts: loading overlay, parallax mouse, WebAudio ambient generator ===== -->
+<script>
+  // ===== Loading overlay fade-out =====
+  window.addEventListener('load', () => {
+    const L = document.getElementById('loading');
+    if(!L) return;
+    L.style.transition = 'opacity 0.9s ease, visibility 0.9s ease';
+    L.style.opacity = '0';
+    setTimeout(()=>{ L.style.display='none'; }, 1000);
+  });
 
+  // ===== Parallax subtle follow (mouse) =====
+  document.addEventListener('mousemove', (e) => {
+    const els = document.querySelectorAll('.logo-wrap, .glitch-title, .welcome, .card');
+    const x = (e.clientX / window.innerWidth - 0.5) * 10;
+    const y = (e.clientY / window.innerHeight - 0.5) * 8;
+    els.forEach((el, i) => {
+      const depth = (i % 3) * 0.7 + 0.6;
+      el.style.transform = `translate(${x*depth}px, ${y*depth}px)`;
+    });
+  });
 
-    <div class="card">
-      <h2>Koordinate Hood</h2>
-      <ul>
-        <li>Cooming Soon</li>
-      </ul>
-    </div>
+  // ===== Ambient audio (WebAudio) - generate dark ambient/noise =====
+  let audioCtx = null, noiseNode=null, gainNode=null, filterNode=null, lfo=null, playing=false;
+  function initAudio(){
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // create noise
+    const bufferSize = 2 * audioCtx.sampleRate;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++){
+      data[i] = (Math.random() * 2 - 1) * 0.3; // low amplitude noise
+    }
+    noiseNode = audioCtx.createBufferSource();
+    noiseNode.buffer = buffer;
+    noiseNode.loop = true;
 
-    <div class="card">
-      <h2>Info Tugas</h2>
-      <ul>
-        <li>1. Menjaga Mr4</li>
-        <li>2. Menjalankan Bisnis antar Geng  </li>
-        <li>3. </li>
-        <li>4. </li>
-        <li>5. -</li>
-        <li>6. -</li>
-        <li>7. -</li>
-        <li>8. -</li>
-        <li>9. -</li>
-        <li>10. -</li>
-      </ul>
-    </div>
+    // lowpass filter to make it ambient
+    filterNode = audioCtx.createBiquadFilter();
+    filterNode.type = 'lowpass';
+    filterNode.frequency.value = 900; // adjustable
 
-  </div>
+    // slow LFO to modulate filter cutoff for movement
+    lfo = audioCtx.createOscillator();
+    const lfoGain = audioCtx.createGain();
+    lfo.type = 'sine';
+    lfo.frequency.value = 0.07; // very slow
+    lfoGain.gain.value = 650; // modulation depth
+    lfo.connect(lfoGain);
+    lfoGain.connect(filterNode.frequency);
 
-  <footer>
-    © 2025 N9M — NightMare Clan. All Rights Reserved.
-  </footer>
+    // gain control
+    gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0.15; // master volume (keep low)
+    // final routing
+    noiseNode.connect(filterNode);
+    filterNode.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    // also add a subtle harmonic via oscillator for eerie pad
+    const osc = audioCtx.createOscillator();
+    const oscGain = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.value = 45; // low drone
+    oscGain.gain.value = 0.02;
+    const oscFilter = audioCtx.createBiquadFilter(); oscFilter.type='lowpass'; oscFilter.frequency.value=300;
+    osc.connect(oscFilter); oscFilter.connect(oscGain); oscGain.connect(gainNode);
+
+    // start nodes
+    noiseNode.start(0);
+    lfo.start(0);
+    osc.start(0);
+
+    // keep reference to oscillator to stop later if needed
+    audioNodes = {noiseNode, lfo, osc, oscGain};
+  }
+
+  // controls
+  const playBtn = document.getElementById('playBtn'), stopBtn = document.getElementById('stopBtn');
+  playBtn.addEventListener('click', async () => {
+    if(!audioCtx) initAudio();
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
+    playing = true;
+    playBtn.textContent = '▶ Playing';
+    playBtn.style.opacity = '0.9';
+  });
+  stopBtn.addEventListener('click', () => {
+    if(!audioCtx) return;
+    audioCtx.suspend();
+    playing = false;
+    playBtn.textContent = '▶ Play Ambience';
+  });
+
+  // ===== Accessibility: keyboard toggle (space) =====
+  document.addEventListener('keydown', (e) => {
+    if(e.code === 'Space'){
+      e.preventDefault();
+      if(!audioCtx) initAudio();
+      if(audioCtx.state === 'suspended'){ audioCtx.resume(); playBtn.textContent='▶ Playing'; }
+      else{ audioCtx.suspend(); playBtn.textContent='▶ Play Ambience'; }
+    }
+  });
+
+  // ===== Ensure loading overlay exists even before load event (in case assets are already cached) =====
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const L = document.getElementById('loading');
+    if(!L) return;
+    // fallback hide after 1.8s if load not fired (safety)
+    setTimeout(()=>{ if(L.style.display!=='none'){ L.style.opacity='0'; setTimeout(()=>L.style.display='none',900);} }, 1800);
+  });
+</script>
 
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>N9M Clan Website</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .bg {
+        position: fixed;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.2;
+        z-index: -1;
+        filter: blur(3px);
+    }
+
+    .glitch {
+        font-size: 60px;
+        font-weight: bold;
+        margin-top: 120px;
+        position: relative;
+        display: inline-block;
+        animation: glitch 1s infinite;
+    }
+
+    @keyframes glitch {
+        0% { text-shadow: 2px 2px red; }
+        20% { text-shadow: -2px -2px blue; }
+        40% { text-shadow: 2px -2px green; }
+        60% { text-shadow: -2px 2px purple; }
+        80% { text-shadow: 3px 3px cyan; }
+        100% { text-shadow: 0 0 5px white; }
+    }
+
+    .content {
+        margin-top: 50px;
+        font-size: 20px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND BASE64 -->
+<div class="bg" style="
+background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAB4CAYAAABrV0EXAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEM0lEQVR4nO3dMW4bRxzH8c9PmA7aIP9N6pynCKgbRpoE2mTlwokHhl6Y9pB7KbEXHCGSBEWwDhgSUgYEgKBiK2ANpTi27C/med2e7p7y7d55y47/nd2dfZ+7qndd1WVzbqu6uqqv/52vWn3nUPKCsUJeCk0AxQm4GTQDFDbgZNAIUNuBk0AxQ24GTQCFDbgZNAIdg1cbtUgCCOyvy62RC2qeqPSEdxj4mZmVWlVEqtxISFi7WRJYDWJnZ8erUrEKhY7u3196zujt7WZgHdolopciMj4393dXVS28ePH8xMTDwMOA3DCUlkcGxth4eYlmWFYsK9gxDeBJQi7hYFnmH5cEMyUDBw70AQwBAaOy8epqYmJ8dHIyMjLeh2uDaseuH6+vrzZs0aC0A1CEIP62trS3GxsXFxYWFjZ2fm1tYWTk5OuFwus7JyWlpaGBgYWFtbC47jz7l2uzg4Nz8/PoaGhW1tbRw0mYTwD8JVhvb29SXZ2Njy9jYGBgbGxsZGRk0Nvbi81mF5wKIRp7e3tzc7Odv78/PzZs2eTnJzMy8vr9u3bnzv3h3cc5AoRESEh5+fn6uhoaHx8fAwMDS0tLeXk5cHBw+MyZM+bNm7e/fu2aVWm2nEUXyCkUYOHWVmZq6wsNDg6Oj65YtW4aLi3sTQHMRpJgdHd3d+vr6YWFhLy8vJiYmKioqLy7u9vW1tbW2trbN27c2NjY5OTk2dnZ8vLyOjo6hoaGezsbAwMDL29vj4eGFh4Vauks+fkZGRMTExFAhEhISDhw5Mhw4cKCkp6ejokO/evRkZGXH06FGpqakhISE8PDwoLCzMzM09PDwcHh8OHD09PSEiYmJhZWWlr68vb29vLy8tm3btpMnT4aGhu7fvw8PD3p6euswcOXLU1NTc2NjIyMj5eXlg4ODqakpVVVVJcuXL9fX1xsbGy4uLgA4BWEIu8Dw2dnZoaGhISEhk5GQ4ODiEhYUFBQZGRn5+fkJCQJWTk5MTHx3t7e9vb3DAE4C2EQu4Hw6Ojrs7GxBQUFoaOjw8LCUlJSioqKioqCgoLGxsaamprw8HBhYWFSUmLPnz+np6fDw8Lz9fVVUVESEhJiYmJSUlGhoaExMTVlZW+vr6aWlpXFxciI+Ph4WFJRUVKSkrMzMysrKytLS0PDw8cOHCBON52g0CykHh5+dnb29PT0zMzNubm5ubu7o6OjZWVlTk7OioqKPjw89PT0PT0/d3d3x9fX29vbBw8fDwMBAYWFhGRkZq6urExIStra2ZWVlDQ0OBgYGJiYmZmZmYmJjAwMC4uLkwGaiyEJwBmYWFUf3+/nJwcSkpKMjIyEBAQ6urq7u7utLS0oqKiwsHBISEikpKTg4OCnp6d5eXnY2NhgZGSwvr6GhoaSkpLCwsKmpqWJiYm9vb2+vr5ra2t3t7eioqKGhgYODg4FBQUiIiIeHh4ZGRkioqKjAwMNzc3Ly8vIyMjg4OBb29vKysrwcHBdXV1nZ2dXFxcEhISJibm/v5+cHBQUpKSmhoaHd3d29vb2dnZaeujhBqKwCckNHRAAAAABJRU5ErkJggg==');
+"></div>
+
+
