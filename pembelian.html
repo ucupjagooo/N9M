@@ -77,7 +77,7 @@
     <!-- Header Aplikasi -->
     <header class="text-center mb-8 border-b-2 border-purple-accent/50 pb-4">
         <h1 class="4xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-glow to-purple-accent">
-            <span class="shadow-glow-sm">Toko Perlengkapan Digital</span>
+            <span class="shadow-glow-sm">Pasar Gelap</span>
         </h1>
         <p class="text-gray-400 mt-2 text-lg">Siapkan diri Anda dengan perlengkapan terbaik!</p>
     </header>
@@ -110,18 +110,24 @@
                         <span id="total-price" class="text-3xl font-extrabold text-purple-accent shadow-glow-sm">$0</span>
                     </div>
 
-                    <!-- Tombol Checkout (Diubah menjadi tombol yang memicu proses pembuatan pesan WA) -->
-                    <button onclick="checkout()" class="btn-glow w-full py-3 rounded-lg text-white font-semibold uppercase tracking-wider transition duration-200">
-                        Pesan via WhatsApp
-                    </button>
-                    <!-- Tombol untuk membuka link WA akan muncul setelah validasi -->
-                    <a id="wa-link-button" href="#" target="_blank" class="hidden btn-glow w-full py-3 mt-3 rounded-lg text-center text-white font-semibold uppercase tracking-wider transition duration-200 bg-green-600 hover:bg-green-700 hover:shadow-green-500/50" role="button">
-                        Lanjut ke WhatsApp
-                    </a>
-                    
-                    <p id="checkout-message" class="text-center mt-3 text-sm text-yellow-400 hidden">
-                        <!-- Pesan akan muncul di sini setelah validasi -->
-                    </p>
+                    <!-- Area Tombol Checkout -->
+                    <div id="checkout-area">
+                        <!-- Tombol "Pesan via WhatsApp" (muncul saat jam operasional) -->
+                        <button id="checkout-button" onclick="checkout()" class="btn-glow w-full py-3 rounded-lg text-white font-semibold uppercase tracking-wider transition duration-200 hidden">
+                            Pesan via WhatsApp
+                        </button>
+                        
+                        <!-- Tombol untuk membuka link WA (muncul setelah validasi) -->
+                        <a id="wa-link-button" href="#" target="_blank" class="hidden btn-glow w-full py-3 mt-3 rounded-lg text-center text-white font-semibold uppercase tracking-wider transition duration-200 bg-green-600 hover:bg-green-700 hover:shadow-green-500/50" role="button">
+                            Lanjut ke WhatsApp
+                        </a>
+
+                        <!-- Pesan Jam Tutup atau Pesan Validasi -->
+                        <p id="checkout-message" class="text-center mt-3 text-sm text-yellow-400">
+                            <!-- Pesan akan muncul di sini (termasuk pesan jam tutup) -->
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </aside>
@@ -141,7 +147,7 @@
             { id: 5, name: "AWP", price: 60000, description: "Senjata Kelas Berat (Sniper)." },
             { id: 6, name: "Vest II", price: 30000, description: "Armor Kelas Berat (Perlindungan Maksimal)." },
             { id: 7, name: "Vest I", price: 10000, description: "Armor Kelas Menengah." },
-            { id: 8, name: "Tobaco", price: 5000, description: "Item Konsumsi Kelas Bawah (Simulasi Rokok/Stimulan)." },
+            { id: 8, name: "Tobaco", price: 1000, description: "Item Konsumsi Kelas Bawah (Simulasi Rokok/Stimulan)." },
             { id: 9, name: "Bandage", price: 5000, description: "Item Healing untuk mengobati luka." },
             { id: 10, name: "Robbery Tools", price: 20000, description: "Peralatan lengkap untuk aktivitas 'Maling'." },
             { id: 11, name: "Peluru Apapun", price: 40000, description: "Kotak amunisi universal untuk semua jenis senjata." },
@@ -159,6 +165,15 @@
                 currency: 'USD',
                 minimumFractionDigits: 0
             }).format(number);
+        };
+        
+        // 0. Fungsi Pengecekan Jam Operasional
+        const checkOperatingHours = () => {
+            const now = new Date();
+            const hour = now.getHours(); 
+            // Jam operasional: 15:00 (3 sore) sampai 21:00 (9 malam)
+            // Jam 21:00 sudah tutup, jadi harus kurang dari 21
+            return hour >= 15 && hour < 21; 
         };
 
         // 1. Fungsi untuk Menghitung dan Memperbarui Total Harga
@@ -218,10 +233,12 @@
             `).join('');
         };
 
-        // 5. Fungsi untuk Merender Isi Keranjang Belanja
+        // 5. Fungsi untuk Merender Isi Keranjang Belanja & Mengontrol Tombol Checkout
         const renderCart = () => {
             const cartItemsDiv = document.getElementById('cart-items');
             const waLinkButton = document.getElementById('wa-link-button');
+            const checkoutButton = document.getElementById('checkout-button');
+            const messageDiv = document.getElementById('checkout-message');
             
             let cartContent = '';
 
@@ -235,7 +252,7 @@
 
             if (itemsInCart.length === 0) {
                 cartContent = `<p class="text-gray-500 text-center py-4">Keranjang Anda kosong.</p>`;
-                waLinkButton.classList.add('hidden'); // Sembunyikan tombol WA jika keranjang kosong
+                waLinkButton.classList.add('hidden'); 
             } else {
                 cartContent = itemsInCart.map(item => `
                     <div class="flex items-center justify-between p-3 bg-dark-bg rounded-lg border border-gray-700">
@@ -250,28 +267,54 @@
                         </div>
                     </div>
                 `).join('');
-                waLinkButton.classList.remove('hidden'); // Tampilkan tombol WA jika ada item
             }
 
             cartItemsDiv.innerHTML = cartContent;
-            calculateTotal(); // Selalu hitung ulang total setiap kali keranjang diubah
+            calculateTotal(); // Selalu hitung ulang total
+
+            // LOGIKA PENGENDALIAN JAM OPERASIONAL
+            if (checkOperatingHours() && itemsInCart.length > 0) {
+                checkoutButton.classList.remove('hidden');
+                messageDiv.textContent = "";
+            } else if (!checkOperatingHours()) {
+                // Sembunyikan semua tombol order jika di luar jam kerja
+                checkoutButton.classList.add('hidden');
+                waLinkButton.classList.add('hidden');
+                messageDiv.textContent = "Toko tutup. Jam operasional: 15:00 - 21:00.";
+                messageDiv.classList.remove('hidden', 'text-green-400');
+                messageDiv.classList.add('text-red-400');
+            } else {
+                 // Hanya keranjang kosong
+                checkoutButton.classList.add('hidden');
+                waLinkButton.classList.add('hidden');
+                messageDiv.textContent = "";
+            }
         };
 
         // 6. Fungsi Checkout: Membuat dan mengarahkan ke link WhatsApp
         const checkout = () => {
             const messageDiv = document.getElementById('checkout-message');
             const waLinkButton = document.getElementById('wa-link-button');
+            const checkoutButton = document.getElementById('checkout-button');
             const totalAmount = calculateTotal();
             const totalPriceText = document.getElementById('total-price').textContent;
 
+            // Pengecekan jam operasional kedua (redundansi untuk keamanan)
+            if (!checkOperatingHours()) {
+                messageDiv.textContent = "Toko tutup. Jam operasional: 15:00 - 21:00.";
+                messageDiv.classList.remove('hidden', 'text-green-400');
+                messageDiv.classList.add('text-red-400');
+                checkoutButton.classList.add('hidden');
+                waLinkButton.classList.add('hidden');
+                return;
+            }
+
             if (Object.keys(cart).length === 0) {
                 messageDiv.textContent = "Keranjang Anda masih kosong. Silakan pilih item dulu.";
-                messageDiv.classList.remove('hidden');
-                messageDiv.classList.remove('text-green-400');
+                messageDiv.classList.remove('hidden', 'text-green-400');
                 messageDiv.classList.add('text-red-400');
                 waLinkButton.classList.add('hidden');
 
-                // Sembunyikan pesan setelah 5 detik
                 setTimeout(() => {
                     messageDiv.classList.add('hidden');
                 }, 5000);
@@ -306,21 +349,21 @@
             // 5. Update tombol dan tampilkan pesan
             waLinkButton.href = whatsappUrl;
             waLinkButton.classList.remove('hidden');
+            checkoutButton.classList.add('hidden'); // Sembunyikan tombol utama
             
             messageDiv.textContent = `List pesanan siap! Klik tombol di bawah untuk mengirim via WhatsApp.`;
             messageDiv.classList.remove('hidden', 'text-red-400');
             messageDiv.classList.add('text-green-400');
-
-            // Reset keranjang (opsional, bisa diubah)
-            // cart = {};
-            // renderCart();
         };
 
 
         // Inisialisasi Aplikasi saat memuat halaman
         window.onload = () => {
             renderProducts();
-            renderCart(); // Render keranjang awal (kosong)
+            renderCart(); // Render keranjang awal (kosong) dan cek jam operasional
+            
+            // Atur timer untuk refresh setiap 1 menit untuk update jam operasional secara otomatis
+            setInterval(renderCart, 60000); 
         };
     </script>
 </body>

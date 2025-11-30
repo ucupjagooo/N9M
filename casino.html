@@ -36,6 +36,15 @@
             border-radius: 9999px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
+        .btn-casino-action {
+            background-color: #6c47ff; /* Ungu */
+            box-shadow: 0 0 10px rgba(108, 71, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-casino-action:hover {
+            background-color: #5a3ee0;
+            box-shadow: 0 0 15px rgba(108, 71, 255, 0.8);
+        }
     </style>
 </head>
 <body>
@@ -58,10 +67,12 @@
 
             <!-- Blok Gambar Casino -->
             <div class="relative rounded-lg overflow-hidden shadow-purple-heavy">
+                <!-- Placeholder untuk Gambar Casino -->
                 <img 
-                    src=casino.png  
+                    src=casino.png  
                     alt="Interior Casino dengan meja judi dan peti-peti" 
                     class="w-full h-auto object-cover opacity-90"
+                    onerror="this.onerror=null; this.src='https://placehold.co/1200x400/3e1f76/ffffff?text=HIGH+ROLLER+CASINO+FLOOR';"
                 >
                 <div class="absolute inset-0 bg-black bg-opacity-30"></div>
             </div>
@@ -121,28 +132,44 @@
                 <!-- Kolom 2: Regulasi dan Info RP -->
                 <div class="space-y-6">
                     <h2 class="text-3xl font-bold text-white border-b-2 border-purple-highlight pb-2">
-                        Regulasi & Batasan
+                        Regulasi & Jam Operasional
                     </h2>
                     
                     <!-- Batasan Taruhan -->
                     <div class="bg-[#3e1f76] p-4 rounded-lg border border-[#6c47ff]">
-                        <p class="text-xl font-semibold text-purple-highlight mb-2">Minimal Bet</p>
-                        <p class="text-white text-3xl font-extrabold">$10</p>
-                        <p class="text-sm text-gray-300 mt-1">Minimal taruhan wajib per putaran.</p>
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-xl font-semibold text-purple-highlight">Minimal Bet</p>
+                            <p class="text-white text-3xl font-extrabold">$10</p>
+                        </div>
+                        <div class="border-t border-gray-600 pt-3 mt-3">
+                            <p class="text-xl font-semibold text-purple-highlight mb-1">Jam Operasional:</p>
+                            <p id="operating-hours" class="text-white text-lg font-bold">15:00 (3 Sore) - 24:00 (12 Malam)</p>
+                            <p id="status-indicator" class="text-sm font-semibold mt-1">
+                                <!-- Status buka/tutup akan di-render di sini -->
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Peringatan RP -->
-                    <div>
-                        <p class="text-lg font-semibold text-purple-highlight mb-2">Catatan Operasional:</p>
-                        <p class="text-gray-100 leading-relaxed">
-                            Casino ini beroperasi di bawah perlindungan Mr04 dan Mafia Rebelze. Segala bentuk kecurangan atau upaya perampokan akan ditangani dengan cepat dan tanpa toleransi. Kami menjamin kerahasiaan dan keamanan dana Anda—selama Anda bermain sesuai aturan.
-                        </p>
-                    </div>
+                    <!-- Tombol Aksi Casino (Deposit/Taruhan) -->
+                    <div id="casino-action-area" class="space-y-3">
+                         <!-- Tombol ini akan disembunyikan/ditampilkan oleh JS -->
+                        <button id="action-button" onclick="promptCasinoAction()" class="btn-casino-action w-full py-3 rounded-lg text-white font-semibold uppercase tracking-wider hidden">
+                            Lanjutkan Taruhan & Deposit
+                        </button>
+                        
+                        <!-- Peringatan RP -->
+                        <div>
+                            <p class="text-lg font-semibold text-purple-highlight mb-2">Catatan Operasional:</p>
+                            <p class="text-gray-100 leading-relaxed">
+                                Casino ini beroperasi di bawah perlindungan Mr04 dan Mafia Rebelze. Segala bentuk kecurangan atau upaya perampokan akan ditangani dengan cepat dan tanpa toleransi. Kami menjamin kerahasiaan dan keamanan dana Anda—selama Anda bermain sesuai aturan.
+                            </p>
+                        </div>
 
-                    <!-- Kontak -->
-                    <div class="p-4 bg-yellow-800 bg-opacity-30 rounded-lg border border-yellow-500">
-                        <p class="font-bold text-yellow-300">Hubungi Dealer:</p>
-                        <p class="text-sm text-gray-200">Untuk Deposit / Penarikan, harap hubungi staf berizin di lokasi atau operator Mr04 melalui saluran rahasia.</p>
+                        <!-- Kontak -->
+                        <div class="p-4 bg-yellow-800 bg-opacity-30 rounded-lg border border-yellow-500">
+                            <p class="font-bold text-yellow-300">Hubungi Dealer:</p>
+                            <p class="text-sm text-gray-200">Untuk Deposit / Penarikan, harap hubungi staf berizin di lokasi atau operator Mr04 melalui saluran rahasia.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -160,5 +187,57 @@
 
     </div>
 
+    <script>
+        // Jam operasional: 15 (3 sore) sampai 23 (sebelum 24:00/00:00)
+        const START_HOUR = 15; // 3 sore
+        const END_HOUR = 24;   // 12 malam (diatur menjadi 24 agar mencakup jam 23:xx)
+
+        // Fungsi untuk memeriksa jam operasional
+        const checkOperatingHours = () => {
+            const now = new Date();
+            const hour = now.getHours(); 
+            // Cek apakah jam saat ini >= 15 DAN jam saat ini < 24 (mencakup 15:00 hingga 23:59)
+            return hour >= START_HOUR && hour < END_HOUR;
+        };
+
+        // Fungsi untuk mengupdate status casino dan tombol
+        const updateCasinoStatus = () => {
+            const is_open = checkOperatingHours();
+            const statusIndicator = document.getElementById('status-indicator');
+            const actionButton = document.getElementById('action-button');
+
+            if (is_open) {
+                // Kasino BUKA
+                statusIndicator.innerHTML = '<span class="text-green-400">STATUS: BUKA</span> - Segera bergabung di meja!';
+                actionButton.classList.remove('hidden');
+            } else {
+                // Kasino TUTUP
+                statusIndicator.innerHTML = '<span class="text-red-400">STATUS: TUTUP</span> - Silakan datang kembali di jam operasional.';
+                actionButton.classList.add('hidden');
+            }
+        };
+
+        // Fungsi yang dipanggil saat tombol aksi diklik (Placeholder)
+        const promptCasinoAction = () => {
+            // Ini adalah placeholder, karena tidak ada fungsionalitas taruhan penuh.
+            // Anda bisa mengganti ini dengan tautan WA/Discord/In-game command jika perlu.
+            const statusIndicator = document.getElementById('status-indicator');
+            statusIndicator.innerHTML = '<span class="text-yellow-400">Anda siap bertaruh!</span> Harap lanjutkan komunikasi di dalam game.';
+            statusIndicator.classList.remove('hidden');
+            
+            // Sembunyikan pesan setelah beberapa detik
+            setTimeout(() => {
+                 updateCasinoStatus();
+            }, 5000);
+        };
+
+        // Inisialisasi saat memuat halaman
+        window.onload = () => {
+            updateCasinoStatus();
+            
+            // Atur timer untuk refresh status setiap 1 menit (jika waktu berubah)
+            setInterval(updateCasinoStatus, 60000); 
+        };
+    </script>
 </body>
 </html>

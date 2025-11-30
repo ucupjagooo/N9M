@@ -5,14 +5,237 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N9M - NightMare Clan</title>
     
+    <!-- Memuat Tailwind CSS dari CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Library AOS untuk Animasi Scroll -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Google Fonts untuk Tipografi yang Lebih Baik -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;900&display=swap" rel="stylesheet">
-    <!-- File CSS Kita -->
-    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Konfigurasi Dasar dan Font */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0d0d0d; /* Hitam pekat */
+            color: #f0f0f0;
+            line-height: 1.6;
+        }
+        /* Definisi Warna Ungu Glow */
+        :root {
+            --purple-primary: #a855f7; /* Ungu sedang */
+            --purple-highlight: #c084fc; /* Ungu terang (Glow) */
+            --purple-border: #6c47ff; /* Ungu gelap (Border) */
+        }
+
+        /* Struktur Utama */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Navigasi */
+        .navbar {
+            background-color: rgba(13, 13, 13, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            justify-content: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #333;
+        }
+        .navbar a {
+            color: #f0f0f0;
+            padding: 0 15px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .navbar a:hover {
+            color: var(--purple-highlight); /* Ungu Highlight */
+        }
+
+        /* Hero Section */
+        .hero {
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--purple-highlight); /* Ungu Highlight */
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.5); /* Shadow Ungu */
+        }
+        .hero-logo-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--purple-border); /* Ungu Border */
+            box-shadow: 0 0 15px rgba(108, 71, 255, 0.7); /* Shadow Ungu */
+        }
+        .hero-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background-color: var(--purple-primary); /* Ungu Primer */
+            color: #0d0d0d;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .cta-button:hover {
+            background-color: var(--purple-border); /* Ungu Lebih Gelap */
+            transform: scale(1.05);
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--purple-highlight); /* Ungu Highlight */
+            border-bottom: 3px solid var(--purple-border); /* Ungu Border */
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .section-header p {
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        /* About Grid */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        .about-text {
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 5px solid var(--purple-border); /* Ungu Border */
+        }
+        .about-text h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--purple-highlight); /* Ungu Highlight */
+            margin-bottom: 10px;
+        }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .portfolio-item {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #333;
+        }
+        .portfolio-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(108, 71, 255, 0.3); /* Shadow Ungu */
+        }
+        .portfolio-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+        .portfolio-item:hover .portfolio-image {
+            opacity: 1;
+        }
+        .portfolio-item h3 {
+            padding: 15px 15px 5px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .portfolio-item p {
+            padding: 0 15px 15px;
+            color: var(--purple-highlight); /* Ungu Highlight */
+            font-style: italic;
+        }
+        .portfolio-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Kontak & Footer */
+        .contact-section {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #1a1a1a;
+            border-top: 5px solid var(--purple-border); /* Ungu Border */
+        }
+        .contact-section h2 {
+            color: var(--purple-highlight); /* Ungu Highlight */
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #111;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Media Queries untuk Responsif */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Custom Styles for Admin Panel */
+        .admin-panel-card {
+            background-color: #2a094e; /* Ungu gelap untuk akses admin */
+            border: 3px solid var(--purple-highlight); /* Border Ungu terang */
+            transition: all 0.3s;
+        }
+        .admin-panel-card:hover {
+            background-color: #3e1f76;
+            box-shadow: 0 10px 20px rgba(108, 71, 255, 0.5); /* Shadow Ungu */
+            transform: translateY(-5px);
+        }
+        .admin-panel-text {
+            color: var(--purple-highlight); /* Ungu Highlight */
+        }
+        .admin-access-denied {
+            background-color: #1a1a1a;
+            border: 3px solid #666;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
 
@@ -21,6 +244,7 @@
         <a href="#beranda">Beranda</a>
         <a href="#tentang">Tentang</a>
         <a href="#aktivitas">Bisnis & Aktivitas</a>
+        <a href="#admin-panel">Panel Admin</a> <!-- Link Navigasi Baru -->
         <a href="#kontak">Kontak</a>
     </nav>
 
@@ -28,6 +252,7 @@
     <section id="beranda" class="hero">
         <div class="hero-content">
             <div class="hero-logo-container" data-aos="fade-down" data-aos-duration="1000">
+                <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
                 <img src="N9M.jpeg" alt="N9M Logo" class="hero-logo">
             </div>
             
@@ -66,7 +291,8 @@
             <!-- Kartu 1: Mafia Mr 04 -->
             <a href="mafia-mr04.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="100">
-                    <img src="https://z-cdn-media.chatglm.cn/files/d6b3812d-d722-4a92-a25b-332572cf12f8_pasted_image_1764309076249.png?auth_key=1864309120-eb6db098bec647d08da8ce5a0e400994-0-3066f888cafda741af0aef6089989662" alt="Mafia Mr 04" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
+                    <img src="mr04.jpeg" alt="Mafia Mr 04" class="portfolio-image">
                     <h3>Mafia dan N9M</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
@@ -75,7 +301,8 @@
             <!-- Kartu 2: Hood N9M -->
             <a href="hood-n9m.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="https://z-cdn-media.chatglm.cn/files/2d84014d-14db-4162-a7e5-7794ac2f0e62_Screenshot%202025-11-28%20125229.png?auth_key=1864309678-fab4e63e7bf24a84a37fd4b579de28ef-0-e6440410881f520c63c7907a92c80616" alt="Hood N9M" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
+                    <img src="hood.png" alt="Hood N9M" class="portfolio-image">
                     <h3>Hood N9M</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
@@ -84,7 +311,8 @@
             <!-- Kartu 3: Casino -->
             <a href="casino.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="300">
-                    <img src="https://z-cdn-media.chatglm.cn/files/4f6eec36-0bfc-480c-a60b-1c42fb8fc52b_Screenshot%202025-11-28%20125256.png?auth_key=1864309678-6c29a86bf3ec436390441a62b7d721a6-0-69e6d25e103f4a66925122ab16a4fd48" alt="Casino" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
+                    <img src="casino.png" alt="Casino" class="portfolio-image">
                     <h3>Casino</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
@@ -93,7 +321,8 @@
             <!-- Kartu 4: Lapangan Vadel -->
             <a href="lapangan-vadel.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="400">
-                    <img src="https://z-cdn-media.chatglm.cn/files/3e2c7c6b-6ef3-4930-a3b8-86bcad16daca_Screenshot%202025-11-28%20125311.png?auth_key=1864309678-2afaf4c9e73f4ecebf43f56f312272e8-0-e3bdb21ed4aa2b3ed0f1b177c498f13f" alt="Lapangan Vadel" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
+                    <img src="lapvadel.png" alt="Lapangan Vadel" class="portfolio-image">
                     <h3>Lapangan Vadel</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
@@ -102,7 +331,8 @@
             <!-- Kartu 5: Tempat Latihan Menembak -->
             <a href="tempat-latihan.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="500">
-                    <img src="https://z-cdn-media.chatglm.cn/files/650e5dd6-c4ba-4fd4-ac46-b43ba18e2b05_Screenshot%202025-11-28%20125327.png?auth_key=1864309678-3a0b47a8452d424e8cd337d448bea054-0-5402036755c38bb34ea05f847f8e73ee" alt="Tempat Latihan Menembak" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
+                    <img src="latihannembak.png" alt="Tempat Latihan Menembak" class="portfolio-image">
                     <h3>Tempat Latihan Menembak</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
@@ -111,66 +341,81 @@
             <!-- Kartu 6: Ladang Ganza -->
             <a href="ladang-ganza.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
-                    <img src="https://z-cdn-media.chatglm.cn/files/ad5f7d01-c167-4291-973b-5de03bd6e236_Screenshot%202025-11-28%20125435.png?auth_key=1864309678-aee1ce15ed2d4c0f9e1d1682aecf8736-0-7b2d58bf0d3a3d26c2f7ec3c96a59ef9" alt="Ladang Ganza" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
+                    <img src="ganjar.png" alt="Ladang Ganza" class="portfolio-image">
                     <h3>Ladang Ganza</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
             </a>
-            <!-- Kartu 7: aktifitas harian -->
+            
+            <!-- Kartu 7: aktivitas harian -->
             <a href="aktivitas.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
-                    <img src=aktivitas.png alt="Ladang Ganza" class="portfolio-image">
-                    <h3>aktivitas harian Clan</h3>
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
+                    <img src="aktivitas.png" alt="Aktivitas Harian Clan" class="portfolio-image">
+                    <h3>Aktivitas Harian Clan</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
             </a>
 
-            <!-- Kartu 8: aktifitas harian -->
+            <!-- Kartu 8: aktivitas harian -->
             <a href="aktivitas2.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
-                    <img src=aktivitas2.png alt="Ladang Ganza" class="portfolio-image">
-                    <h3>aktivitas Random Kota</h3>
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
+                    <img src="aktivitas2.png" alt="Aktivitas Random Kota" class="portfolio-image">
+                    <h3>Aktivitas Random Kota</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
             </a>
-            <!-- Kartu 9: aktifitas harian -->
+            
+            <!-- Kartu 9: Mr 03 -->
             <a href="mr03.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
-                    <img src=mr031.jpeg alt="Ladang Ganza" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
+                    <img src="mr031.jpeg" alt="Mr 03" class="portfolio-image">
                     <h3>Mr 03</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
             </a>
+        </div>
 
-<!-- Sectionjb: Portfolio / Aktivitas -->
-    <section id="aktivitas" class="container">
-        <div class="section-header" data-aos="fade-up">
+        <div class="section-header" data-aos="fade-up" style="margin-top: 50px;">
             <h2>Pembelian dan Penjualan</h2>
-            <p>disini kalian bisa membeli dan menjual barang yang tersedia</p>
+            <p>Di sini kalian bisa membeli dan menjual barang yang tersedia</p>
         </div>
         <div class="portfolio-grid">
 
-<!-- Kartu beli: Mafia Mr 04 -->
+            <!-- Kartu beli -->
             <a href="pembelian.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="100">
-                    <img src=beli.png alt="Mafia Mr 04" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
+                    <img src="beli.png" alt="Pembelian" class="portfolio-image">
                     <h3>Pembelian</h3>
                     <p>->klik disini untuk detail<-</p>
                 </div>
             </a>
 
-            <!-- Kartu jual: Hood N9M -->
-            <a href="hood-n9m.html" class="portfolio-link">
+            <!-- Kartu jual -->
+            <a href="penjualan.html" class="portfolio-link">
                 <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="200">
-                    <img src=beli.png alt="Hood N9M" class="portfolio-image">
+                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
+                    <img src="beli.png" alt="Jual Barang" class="portfolio-image">
                     <h3>Jual Barang</h3>
                     <p>Cooming Soon</p>
                 </div>
             </a>
-            </div>
         </div>
-    </section>  
+    </section>  
 
+    <!-- Section X: ADMIN PANEL ACCESS (NEW) -->
+    <section id="admin-panel" class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="admin-panel-text">Panel Admin</h2>
+            <p>Akses cepat ke alat manajemen data dan Storyboard.</p>
+        </div>
+        
+        <div id="admin-content-area" class="flex justify-center" data-aos="fade-up" data-aos-delay="200">
+            <!-- Konten Admin akan di-injeksi di sini oleh JavaScript -->
         </div>
     </section>
 
@@ -190,6 +435,43 @@
 
     <!-- JavaScript -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Inisialisasi AOS (Animasi Scroll)
+        AOS.init();
+
+        // --- SIMULASI LOGIKA ADMIN (NON-FIREBASE) ---
+        // Catatan: Ini hanyalah simulasi, isAdmin diatur ke false secara default.
+        // Ubah ke true untuk melihat panel admin.
+        const isAdmin = true; 
+
+        // Fungsi untuk menampilkan panel admin atau pesan 'ADMIN ACCESS'
+        const renderAdminPanel = () => {
+            const adminArea = document.getElementById('admin-content-area');
+            
+            if (isAdmin) {
+                // Tampilan Admin (Akses Penuh)
+                adminArea.innerHTML = `
+                    <a href="inputfotoa1.html" class="portfolio-link w-full max-w-sm">
+                        <div class="portfolio-item admin-panel-card text-center p-8">
+                            <h3 class="text-2xl font-extrabold text-white">Kelola Storyboard</h3>
+                            <p class="mt-2 text-lg">Tambah, Edit, dan Hapus Aktivitas Harian Clan.</p>
+                            <p class="mt-4 text-sm admin-panel-text font-bold">KLIK UNTUK MASUK DASHBOARD</p>
+                        </div>
+                    </a>
+                `;
+            } else {
+                // Tampilan Pengguna Biasa (Akses Ditolak)
+                adminArea.innerHTML = `
+                    <div class="admin-access-denied w-full max-w-sm">
+                        <p class="text-3xl font-extrabold text-gray-500">ADMIN ACCESS</p>
+                        <p class="text-sm text-gray-700 mt-2">Panel ini dibatasi hanya untuk staf manajemen Clan.</p>
+                    </div>
+                `;
+            }
+        };
+
+        // Panggil fungsi saat halaman dimuat
+        window.onload = renderAdminPanel;
+    </script>
 </body>
 </html>
