@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N9M - NightMare Clan</title>
     
-    <!-- Memuat Tailwind CSS dari CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Library AOS untuk Animasi Scroll -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Google Fonts untuk Tipografi yang Lebih Baik -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;900&display=swap" rel="stylesheet">
 
     <style>
@@ -42,18 +39,26 @@
             top: 0;
             z-index: 50;
             display: flex;
-            justify-content: center;
-            padding: 15px 0;
+            justify-content: center; /* Menu tetap di tengah */
+            align-items: center;
+            padding: 15px 20px;
             border-bottom: 1px solid #333;
         }
-        .navbar a {
+        
+        /* Container untuk Link Menu (agar tetap di tengah) */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
             color: #f0f0f0;
-            padding: 0 15px;
+            padding: 0 5px;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s;
         }
-        .navbar a:hover {
+        .nav-links a:hover {
             color: var(--purple-highlight); /* Ungu Highlight */
         }
 
@@ -212,6 +217,16 @@
             .about-grid {
                 grid-template-columns: 1fr;
             }
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+            /* Pada HP, nama user pindah ke bawah menu */
+            #user-badge {
+                position: static !important;
+                transform: none !important;
+                margin-top: 10px;
+            }
         }
 
         /* Custom Styles for Admin Panel */
@@ -235,221 +250,271 @@
             text-align: center;
             border-radius: 10px;
         }
+
+        /* --- STYLING BARU UNTUK ACCESS GATE --- */
+        #access-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0d0d0d;
+            z-index: 1000; /* Pastikan di atas semua konten */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .access-card {
+            background-color: #1a1a1a;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(108, 71, 255, 0.5);
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid var(--purple-border);
+        }
+        .access-card input {
+            background-color: #333;
+            border: 1px solid #555;
+            color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .access-card button {
+            background-color: var(--purple-primary);
+            color: #0d0d0d;
+            font-weight: 600;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .access-card button:hover {
+            background-color: var(--purple-highlight);
+        }
+        .hidden-content {
+            display: none; /* Semua konten utama tersembunyi secara default */
+        }
     </style>
 </head>
 <body>
 
-    <!-- Navigasi -->
-    <nav class="navbar">
-        <a href="#beranda">Beranda</a>
-        <a href="#tentang">Tentang</a>
-        <a href="#aktivitas">Bisnis & Aktivitas</a>
-        <a href="#admin-panel">Panel Admin</a> <!-- Link Navigasi Baru -->
-        <a href="#kontak">Kontak</a>
-    </nav>
+    <div id="access-gate">
+        <div class="access-card" data-aos="zoom-in">
+            <h2 class="text-3xl font-extrabold mb-6 admin-panel-text">Selamat Datang, Anggota N9M</h2>
+            <p class="mb-4 text-sm text-gray-400">Harap masukkan identitas Anda untuk mengakses database klan.</p>
+            
+            <form id="access-form">
+                <input type="text" id="nama-asli" placeholder="Nama Asli (OOC)" required>
+                <input type="text" id="nama-rp" placeholder="Nama RP (IC)" required>
+                <button type="submit" class="cta-button">Masuk ke Situs</button>
+            </form>
+            <p id="error-message" class="text-red-500 mt-3 hidden">Harap isi semua kolom!</p>
+        </div>
+    </div>
+    
+    <div id="main-content" class="hidden-content">
 
-    <!-- Section 1: Beranda / Hero -->
-    <section id="beranda" class="hero">
-        <div class="hero-content">
-            <div class="hero-logo-container" data-aos="fade-down" data-aos-duration="1000">
-                <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
-                <img src="N9M.jpeg" alt="N9M Logo" class="hero-logo">
+        <nav class="navbar relative">
+            <div class="nav-links">
+                <a href="#beranda">Beranda</a>
+                <a href="#tentang">Tentang</a>
+                <a href="#aktivitas">Bisnis & Aktivitas</a>
+                <a href="#admin-panel">Panel Admin</a>
+                <a href="#kontak">Kontak</a>
+            </div>
+
+            <div id="user-badge" class="absolute right-5 flex items-center gap-3 hidden">
+                <div class="text-right hidden md:block"> <p class="text-[10px] text-gray-400 uppercase tracking-wider">Anggota</p>
+                    <p id="display-nama-rp" class="text-sm font-bold text-[#c084fc]">Guest</p>
+                </div>
+                <div class="w-9 h-9 rounded-md bg-purple-900 border border-[#6c47ff] flex items-center justify-center shadow-[0_0_10px_rgba(168,85,247,0.5)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </div>
+        </nav>
+
+        <section id="beranda" class="hero">
+            <div class="hero-content">
+                <div class="hero-logo-container" data-aos="fade-down" data-aos-duration="1000">
+                    <img src="N9M.jpeg" alt="N9M Logo" class="hero-logo">
+                </div>
+                
+                <h1 data-aos="fade-up" data-aos-delay="200">NightMare Clan</h1>
+                <p data-aos="fade-up" data-aos-delay="400">Keluarga mafia kegelapan. Kepercayaan, loyalitas, dan kekuatan adalah fondasi kami.</p>
+                <a href="#tentang" class="cta-button" data-aos="fade-up" data-aos-delay="600">Lebih Lanjut</a>
+            </div>
+        </section>
+
+        <section id="tentang" class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Tentang Kami</h2>
+                <p>Kami bukan sekadar sebuah klan, kami adalah sebuah simbol kekuatan yang tak tergoyahkan di dunia bawah tanah.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-text" data-aos="fade-right">
+                    <h3>Struktur Kaku</h3>
+                    <p>Setiap anggota memiliki peran dan tanggung jawab yang jelas. Dari pimpinan tertinggi hingga anggota inti, semua bergerak dalam satu kesatuan yang solid untuk menjaga dominasi kami.</p>
+                </div>
+                <div class="about-text" data-aos="fade-left">
+                    <h3>Lini Bisnis</h3>
+                    <p>Kekuatan kami didukung oleh berbagai lini bisnis, mulai dari casino, perdagangan senjata, hingga pengendalian pasar gelap. Setiap sektor adalah sumber kekayaan dan pengaruh kami.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="aktivitas" class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Bisnis dan Aktivitas</h2>
+                <p>Berbagai operasi dan bisnis yang menjadi kekuatan inti klan kami.</p>
+            </div>
+            <div class="portfolio-grid">
+                
+                <a href="mafia-mr04.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="100">
+                        <img src="mr04.jpeg" alt="Mafia Mr 04" class="portfolio-image">
+                        <h3>Mafia dan N9M</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+
+                <a href="hood-n9m.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="200">
+                        <img src="hood.png" alt="Hood N9M" class="portfolio-image">
+                        <h3>Hood N9M</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+
+                <a href="casino.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="300">
+                        <img src="casino.png" alt="Casino" class="portfolio-image">
+                        <h3>Casino</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+
+                <a href="lapangan-vadel.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="400">
+                        <img src="lapvadel.png" alt="Lapangan Vadel" class="portfolio-image">
+                        <h3>Lapangan Vadel</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+
+                <a href="tempat-latihan.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="500">
+                        <img src="latihannembak.png" alt="Tempat Latihan Menembak" class="portfolio-image">
+                        <h3>Tempat Latihan Menembak</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+
+                <a href="ladang-ganza.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
+                        <img src="ganjar.png" alt="Ladang Ganza" class="portfolio-image">
+                        <h3>Ladang Ganza</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+                
+                <a href="aktivitas.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
+                        <img src="aktivitas.png" alt="Aktivitas Harian Clan" class="portfolio-image">
+                        <h3>Aktivitas Harian Clan</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+
+                <a href="aktivitas2.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
+                        <img src="aktivitas2.png" alt="Aktivitas Random Kota" class="portfolio-image">
+                        <h3>Aktivitas Random Kota</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+                
+                <a href="mr03.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
+                        <img src="mr031.jpeg" alt="Mr 03" class="portfolio-image">
+                        <h3>Mr 03</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="section-header" data-aos="fade-up" style="margin-top: 50px;">
+                <h2>Pembelian dan Penjualan</h2>
+                <p>Di sini kalian bisa membeli dan menjual barang yang tersedia</p>
+            </div>
+            <div class="portfolio-grid">
+
+                <a href="pembelian.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="100">
+                        <img src="beli.png" alt="Pembelian" class="portfolio-image">
+                        <h3>Pembelian</h3>
+                        <p>->klik disini untuk detail<-</p>
+                    </div>
+                </a>
+
+                <a href="penjualan.html" class="portfolio-link">
+                    <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="200">
+                        <img src="beli.png" alt="Jual Barang" class="portfolio-image">
+                        <h3>Jual Barang</h3>
+                        <p>Cooming Soon</p>
+                    </div>
+                </a>
+            </div>
+        </section> 	
+
+        <section id="admin-panel" class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="admin-panel-text">Panel Admin</h2>
+                <p>Akses cepat ke alat manajemen data dan Storyboard.</p>
             </div>
             
-            <h1 data-aos="fade-up" data-aos-delay="200">NightMare Clan</h1>
-            <p data-aos="fade-up" data-aos-delay="400">Keluarga mafia kegelapan. Kepercayaan, loyalitas, dan kekuatan adalah fondasi kami.</p>
-            <a href="#tentang" class="cta-button" data-aos="fade-up" data-aos-delay="600">Lebih Lanjut</a>
-        </div>
-    </section>
+            <div id="admin-content-area" class="flex justify-center" data-aos="fade-up" data-aos-delay="200">
+                </div>
+        </section>
 
-    <!-- Section 2: Tentang -->
-    <section id="tentang" class="container">
-        <div class="section-header" data-aos="fade-up">
-            <h2>Tentang Kami</h2>
-            <p>Kami bukan sekadar sebuah klan, kami adalah sebuah simbol kekuatan yang tak tergoyahkan di dunia bawah tanah.</p>
-        </div>
-        <div class="about-grid">
-            <div class="about-text" data-aos="fade-right">
-                <h3>Struktur Kaku</h3>
-                <p>Setiap anggota memiliki peran dan tanggung jawab yang jelas. Dari pimpinan tertinggi hingga anggota inti, semua bergerak dalam satu kesatuan yang solid untuk menjaga dominasi kami.</p>
+        <section id="kontak" class="contact-section">
+            <div class="container" data-aos="fade-up">
+                <h2>Bergabunglah dengan Kami</h2>
+                <p>Jika Anda merasa memiliki nyali dan ambisi, hubungi kami untuk menjadi bagian dari keluarga NightMare.</p>
+                <a href="https://wa.me/6283164410185?text=BANG%20SAYA%20MAU%20MASUK%20CLAN" target="_blank" class="cta-button">Hubungi Admin</a>
             </div>
-            <div class="about-text" data-aos="fade-left">
-                <h3>Lini Bisnis</h3>
-                <p>Kekuatan kami didukung oleh berbagai lini bisnis, mulai dari casino, perdagangan senjata, hingga pengendalian pasar gelap. Setiap sektor adalah sumber kekayaan dan pengaruh kami.</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Section 3: Portfolio / Aktivitas -->
-    <section id="aktivitas" class="container">
-        <div class="section-header" data-aos="fade-up">
-            <h2>Bisnis dan Aktivitas</h2>
-            <p>Berbagai operasi dan bisnis yang menjadi kekuatan inti klan kami.</p>
-        </div>
-        <div class="portfolio-grid">
-            
-            <!-- Kartu 1: Mafia Mr 04 -->
-            <a href="mafia-mr04.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="100">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
-                    <img src="mr04.jpeg" alt="Mafia Mr 04" class="portfolio-image">
-                    <h3>Mafia dan N9M</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
+        <footer>
+            <p>&copy; 2024 NightMare Clan. All Rights Reserved.</p>
+        </footer>
 
-            <!-- Kartu 2: Hood N9M -->
-            <a href="hood-n9m.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="200">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
-                    <img src="hood.png" alt="Hood N9M" class="portfolio-image">
-                    <h3>Hood N9M</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-
-            <!-- Kartu 3: Casino -->
-            <a href="casino.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="300">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
-                    <img src="casino.png" alt="Casino" class="portfolio-image">
-                    <h3>Casino</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-
-            <!-- Kartu 4: Lapangan Vadel -->
-            <a href="lapangan-vadel.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="400">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
-                    <img src="lapvadel.png" alt="Lapangan Vadel" class="portfolio-image">
-                    <h3>Lapangan Vadel</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-
-            <!-- Kartu 5: Tempat Latihan Menembak -->
-            <a href="tempat-latihan.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="500">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
-                    <img src="latihannembak.png" alt="Tempat Latihan Menembak" class="portfolio-image">
-                    <h3>Tempat Latihan Menembak</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-
-            <!-- Kartu 6: Ladang Ganza -->
-            <a href="ladang-ganza.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User (diasumsikan) -->
-                    <img src="ganjar.png" alt="Ladang Ganza" class="portfolio-image">
-                    <h3>Ladang Ganza</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-            
-            <!-- Kartu 7: aktivitas harian -->
-            <a href="aktivitas.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
-                    <img src="aktivitas.png" alt="Aktivitas Harian Clan" class="portfolio-image">
-                    <h3>Aktivitas Harian Clan</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-
-            <!-- Kartu 8: aktivitas harian -->
-            <a href="aktivitas2.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
-                    <img src="aktivitas2.png" alt="Aktivitas Random Kota" class="portfolio-image">
-                    <h3>Aktivitas Random Kota</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-            
-            <!-- Kartu 9: Mr 03 -->
-            <a href="mr03.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
-                    <img src="mr031.jpeg" alt="Mr 03" class="portfolio-image">
-                    <h3>Mr 03</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-        </div>
-
-        <div class="section-header" data-aos="fade-up" style="margin-top: 50px;">
-            <h2>Pembelian dan Penjualan</h2>
-            <p>Di sini kalian bisa membeli dan menjual barang yang tersedia</p>
-        </div>
-        <div class="portfolio-grid">
-
-            <!-- Kartu beli -->
-            <a href="pembelian.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="100">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
-                    <img src="beli.png" alt="Pembelian" class="portfolio-image">
-                    <h3>Pembelian</h3>
-                    <p>->klik disini untuk detail<-</p>
-                </div>
-            </a>
-
-            <!-- Kartu jual -->
-            <a href="penjualan.html" class="portfolio-link">
-                <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="200">
-                    <!-- Sumber Gambar Dikembalikan ke File Lokal User -->
-                    <img src="beli.png" alt="Jual Barang" class="portfolio-image">
-                    <h3>Jual Barang</h3>
-                    <p>Cooming Soon</p>
-                </div>
-            </a>
-        </div>
-    </section>  
-
-    <!-- Section X: ADMIN PANEL ACCESS (NEW) -->
-    <section id="admin-panel" class="container">
-        <div class="section-header" data-aos="fade-up">
-            <h2 class="admin-panel-text">Panel Admin</h2>
-            <p>Akses cepat ke alat manajemen data dan Storyboard.</p>
-        </div>
-        
-        <div id="admin-content-area" class="flex justify-center" data-aos="fade-up" data-aos-delay="200">
-            <!-- Konten Admin akan di-injeksi di sini oleh JavaScript -->
-        </div>
-    </section>
-
-    <!-- Section 4: Kontak -->
-    <section id="kontak" class="contact-section">
-        <div class="container" data-aos="fade-up">
-            <h2>Bergabunglah dengan Kami</h2>
-            <p>Jika Anda merasa memiliki nyali dan ambisi, hubungi kami untuk menjadi bagian dari keluarga NightMare.</p>
-            <a href="https://wa.me/6283164410185?text=BANG%20SAYA%20MAU%20MASUK%20CLAN" target="_blank" class="cta-button">Hubungi Admin</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 NightMare Clan. All Rights Reserved.</p>
-    </footer>
-
-    <!-- JavaScript -->
+    </div>
+    
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // Inisialisasi AOS (Animasi Scroll)
         AOS.init();
 
-        // --- SIMULASI LOGIKA ADMIN (NON-FIREBASE) ---
-        // Catatan: Ini hanyalah simulasi, isAdmin diatur ke false secara default.
-        // Ubah ke true untuk melihat panel admin.
+        // --- KONFIGURASI ADMIN ---
         const isAdmin = true; 
+        
+        // --- KONFIGURASI DISCORD (PASTE URL WEBHOOK DISINI) ---
+        // Contoh: "https://discord.com/api/webhooks/123456/abcdefg..."
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1444518017924075572/MR9RymyI5jUyjgmwMsXmN21RLX4-mmK1uem6eBqrXMa_fiDm6yGYGgD8ti1PUCjROapW"; 
 
-        // Fungsi untuk menampilkan panel admin atau pesan 'ADMIN ACCESS'
+        // Fungsi Render Panel Admin
         const renderAdminPanel = () => {
             const adminArea = document.getElementById('admin-content-area');
-            
             if (isAdmin) {
-                // Tampilan Admin (Akses Penuh)
                 adminArea.innerHTML = `
                     <a href="inputfotoa1.html" class="portfolio-link w-full max-w-sm">
                         <div class="portfolio-item admin-panel-card text-center p-8">
@@ -460,7 +525,6 @@
                     </a>
                 `;
             } else {
-                // Tampilan Pengguna Biasa (Akses Ditolak)
                 adminArea.innerHTML = `
                     <div class="admin-access-denied w-full max-w-sm">
                         <p class="text-3xl font-extrabold text-gray-500">ADMIN ACCESS</p>
@@ -470,8 +534,124 @@
             }
         };
 
-        // Panggil fungsi saat halaman dimuat
-        window.onload = renderAdminPanel;
+        // --- LOGIKA SISTEM LOGIN, TAMPILAN NAMA & DISCORD ---
+
+        const accessGate = document.getElementById('access-gate');
+        const mainContent = document.getElementById('main-content');
+        const accessForm = document.getElementById('access-form');
+        const namaAsliInput = document.getElementById('nama-asli');
+        const namaRpInput = document.getElementById('nama-rp');
+        const errorMessage = document.getElementById('error-message');
+        
+        // Elemen Tampilan Nama di Navbar
+        const userBadge = document.getElementById('user-badge');
+        const displayNamaRp = document.getElementById('display-nama-rp');
+        
+        // GANTI KEY AGAR TIDAK BENTROK DENGAN VERSI LAMA
+        // Menggunakan 'sessionStorage' jadi data hanya bertahan selama tab dibuka
+        const N9M_ACCESS_KEY = 'n9m_clan_session';
+
+        // Fungsi Update Tampilan Nama di Navbar
+        const updateNavbarProfile = (namaRp) => {
+            if (namaRp) {
+                displayNamaRp.innerText = namaRp; 
+                userBadge.classList.remove('hidden'); 
+            }
+        };
+
+        // Fungsi Kirim Log ke Discord
+        const sendLogToDiscord = (namaAsli, namaRp) => {
+            if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes("GANTI_DENGAN")) return;
+
+            const message = {
+                embeds: [{
+                    title: "🔔 Login Terdeteksi",
+                    color: 11031031, // Warna Ungu
+                    fields: [
+                        { name: "Nama IC (RP)", value: namaRp, inline: true },
+                        { name: "Nama OOC (Asli)", value: namaAsli, inline: true },
+                        { name: "Waktu", value: new Date().toLocaleString(), inline: false }
+                    ],
+                    footer: { text: "N9M Website System" }
+                }]
+            };
+
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(message)
+            }).catch(err => console.error("Gagal kirim ke Discord:", err));
+        };
+
+        // Fungsi Memberikan Akses
+        const grantAccess = (namaAsli, namaRp, isNewLogin = false) => {
+            // PERUBAHAN UTAMA: Pakai sessionStorage (bukan localStorage)
+            // Data akan hilang saat browser/tab ditutup
+            sessionStorage.setItem(N9M_ACCESS_KEY, JSON.stringify({ 
+                namaAsli, 
+                namaRp, 
+                timestamp: new Date().getTime() 
+            }));
+
+            // Jika login baru, kirim ke Discord
+            if (isNewLogin) {
+                sendLogToDiscord(namaAsli, namaRp);
+            }
+
+            // Update Tampilan
+            updateNavbarProfile(namaRp);
+
+            // Animasi Buka Gerbang
+            accessGate.style.opacity = '0';
+            setTimeout(() => {
+                accessGate.style.display = 'none';
+                mainContent.classList.remove('hidden-content');
+                AOS.refresh(); 
+                renderAdminPanel();
+            }, 500);
+        };
+
+        // Handler saat form disubmit
+        accessForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const namaAsli = namaAsliInput.value.trim();
+            const namaRp = namaRpInput.value.trim();
+
+            if (namaAsli === '' || namaRp === '') {
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+            
+            errorMessage.classList.add('hidden');
+            // Tandai sebagai login baru
+            grantAccess(namaAsli, namaRp, true); 
+        });
+
+        // Fungsi inisialisasi saat halaman dimuat
+        const initializeSite = () => {
+            // Cek sessionStorage (Hanya ada jika tab belum ditutup)
+            const userData = sessionStorage.getItem(N9M_ACCESS_KEY);
+            
+            if (userData) {
+                // Jika data ada (artinya cuma refresh halaman), langsung masuk 
+                const user = JSON.parse(userData);
+                
+                updateNavbarProfile(user.namaRp);
+                
+                // Bypass login screen
+                accessGate.style.display = 'none'; 
+                mainContent.classList.remove('hidden-content');
+                renderAdminPanel();
+            } else {
+                // Jika tidak ada data (Tab baru dibuka atau browser restart), minta login
+                mainContent.classList.add('hidden-content');
+                accessGate.style.display = 'flex';
+                renderAdminPanel(); 
+            }
+        };
+
+        window.onload = initializeSite;
     </script>
 </body>
 </html>
